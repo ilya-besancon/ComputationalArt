@@ -1,6 +1,9 @@
-""" TODO: Put your header comment here """
+""" @ilya-besancon
+
+"""
 
 import random
+import math
 from PIL import Image
 
 
@@ -15,8 +18,27 @@ def build_random_function(min_depth, max_depth):
                  (see assignment writeup for details on the representation of
                  these functions)
     """
-    A = "sin_pi", ["cos_pi", ["x"]]
-    return ["prod", [A], ["prod", ["cos_pi", ["x"]], ["sin_pi", ["y"]]]]
+    depth = random.randint(0, max_depth - min_depth)
+    min_depth = min_depth + depth
+    max_depth = min_depth
+    if min_depth == 0:
+        new_int = random.randint(0, 1)
+        if new_int == 0:
+            return ['x']
+        else:
+            return ['y']
+    picker = random.randint(0, 1)
+    if picker == 0:
+        single_int = random.randint(0, 2)
+        singles = ["cos_pi", "sin_pi", "power"]
+        return [singles[single_int],
+                build_random_function(min_depth - 1, max_depth - 1)]
+    else:
+        double_int = random.randint(0, 2)
+        doubles = ["prod", "avg", "add_third"]
+        return [doubles[double_int],
+                build_random_function(min_depth - 1, max_depth - 1),
+                build_random_function(min_depth - 1, max_depth - 1)]
 
 
 def evaluate_random_function(f, x, y):
@@ -24,8 +46,24 @@ def evaluate_random_function(f, x, y):
         return x
     if f[0] == 'y':
         return y
-    else:
-        return 'None'
+    if f[0] == "cos_pi":
+        return math.cos(3.14 * evaluate_random_function(f[1], x, y))
+    if f[0] == "sin_pi":
+        return math.sin(3.14 * evaluate_random_function(f[1], x, y))
+    if f[0] == "avg":
+        fadd2 = evaluate_random_function(f[2], x, y)
+        return 0.5 * (evaluate_random_function(f[1], x, y) + fadd2)
+    if f[0] == "prod":
+        f2 = evaluate_random_function(f[2], x, y)
+        return evaluate_random_function(f[1], x, y) * f2
+    if f[0] == "power":
+        f1 = evaluate_random_function(f[1], x, y)
+        return f1 * f1
+    if f[0] == "add_third":
+        f1 = evaluate_random_function(f[1], x, y)
+        f2 = evaluate_random_function(f[2], x, y)
+        return (f1 + f2)/3
+    return 'None'
 
     """ Evaluate the random function f with inputs x,y
         Representation of the function f is defined in the assignment writeup
@@ -50,8 +88,13 @@ def remap_interval(val,
     input_range = input_interval_end - input_interval_start
     output_range = output_interval_end - output_interval_start
     ratio = output_range/input_range
+    # print(val)
+    # print(input_interval_start)
     newval = (val - input_interval_start) * ratio + output_interval_start
     return newval
+
+# remap_interval(5,4,6,0,2)
+
     """ Given an input value in the interval [input_interval_start,
         input_interval_end], return an output value scaled to fall within
         the output interval [output_interval_start, output_interval_end].
