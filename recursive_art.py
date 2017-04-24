@@ -1,5 +1,5 @@
 """ @ilya-besancon
-
+This is the updated version of the computational art program.
 """
 
 import random
@@ -168,8 +168,8 @@ def generate_art(filename, x_size=350, y_size=350):
     """
     # Functions for red, green, and blue channels - where the magic happens!
     red_function = build_random_function(7, 9)
-    green_function = build_random_function(7, 9)
-    blue_function = build_random_function(7, 9)
+    green_function = build_random_function(2, 5)
+    blue_function = build_random_function(7, 10)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -188,13 +188,13 @@ def generate_art(filename, x_size=350, y_size=350):
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
 
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    generate_art("myart.png")
+    generate_art("myart1.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
